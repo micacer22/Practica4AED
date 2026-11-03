@@ -146,4 +146,74 @@ head(dirty_iris) #Todo OK
  
 2. Emplea después la función na.omit para quedarnos solo con las filas con datos completos en un nuevo data frame clean_iris.
 
+```{r ejercicio 3}
+# Número y porcentaje de obs completas
+n_completas <- sum(complete.cases(dirty_iris))
+porcentaje <- 100 * n_completas / nrow(dirty_iris)
 
+cat("Observaciones completas:", n_completas, "\n")
+cat("Porcentaje:", porcentaje, "%\n")
+
+clean_iris <- na.omit(dirty_iris)
+```
+Tenenmos 92 observaciones completas, o en valores relativos, un 61%. 
+
+# Detección de outliers univariante
+
+Un outlier es una observación (o conjunto de observaciones) que no parecen consistentes con el resto de valores de esa variable. Por lo general, esas observaciones divergirán del patrón de comportamiento del resto de datos, es decir, presentarán una desviación respecto de la distribución de los datos.
+
+En esta sección, vamos a centrarnos en métodos de detección univariantes, así que, en los ejercicios, a modo de ejemplo, analizaremos solo la variable Petal.Length.
+
+# Ejercicio 4: Estadísticos básicos
+
+La presencia de outliers puede producir una gran influencia en caracterizaciones sencillas de los datos, como la media y la desviación típica.
+
+Empleado la función summarise y across, calcula la media, la desviación típica, mediana, la median absolute deviation from the median (MADM) y el interquartile range (IQR) de las variables numéricas. Hazlo para el data frame con observaciones completas clean_iris (que no tiene NA pero tiene menos observaciones) y para el data frame con datos faltantes dirty_iris (que presenta muchos NA pero tiene todas las observaciones).
+
+Ten en cuenta que no se puede realizar un análisis estadístico con datos faltantes, pero en la mayoría de los casos se puede optar por no considerar dichos valores al realizar los cálculos (parámetro na.rm=TRUE).
+
+Para obtener el valor MADM, escribe una función madm(x) que sea robusta a la presencia de valores NA. Recuerda que el MADM se calcula como 1.4826⋅median(|x−median(x)|).
+
+Compara los resultados para los dos conjuntos en la variable Petal.Length.
+
+```{r ejercicio 4}
+# Función MADM 
+madm <- function(x) {
+  med <- median(x, na.rm = TRUE)
+  1.4826 * median(abs(x - med), na.rm = TRUE)
+}
+
+# Estadísticos de clean_iris
+estad_clean <- clean_iris %>%
+  summarise(across(
+    where(is.numeric),
+    list(
+      media = ~ mean(., na.rm = TRUE),
+      sd = ~ sd(., na.rm = TRUE),
+      mediana = ~ median(., na.rm = TRUE),
+      MADM = ~ madm(.),
+      IQR = ~ IQR(., na.rm = TRUE)
+    )
+  ))
+
+# estadísticos de dirty_iris
+estad_dirty <- dirty_iris %>%
+  summarise(across(
+    where(is.numeric),
+    list(
+      media = ~ mean(., na.rm = TRUE),
+      sd = ~ sd(., na.rm = TRUE),
+      mediana = ~ median(., na.rm = TRUE),
+      MADM = ~ madm(.),
+      IQR = ~ IQR(., na.rm = TRUE)
+    )
+  ))
+
+estad_clean
+estad_dirty
+
+# comparamos Petal.Length
+estad_clean %>% select(starts_with("Petal.Length"))
+estad_dirty %>% select(starts_with("Petal.Length"))
+```
+Cuando observamos las diferencias con Petal.Lengt
