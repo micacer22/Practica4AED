@@ -1,5 +1,5 @@
 ---
-title: "Práctica 4"
+title: "Practica 5"
 author: "Miriam Caballero Cerveró"
 date: "`r Sys.Date()`"
 output:
@@ -97,7 +97,7 @@ dirty_iris <- read_csv("data/dirty_iris.csv")
 # Detección de inconsistencias en los datos
 Por lo general, no hay un convenio o una representación común para indicar un dato perdido o incluso determinados valores especiales. En los siguientes ejercicios vamos a analizar cómo detectar inconsistencias presentes en los datos.
 
-Ejercicio 1: Inspección Visual
+# Ejercicio 1: Inspección Visual
 
 Inspecciona visualmente los valores del conjunto de datos (View) y ordena de mayor a menor y de menor a mayor cada variable para descubrir las diferentes inconsistencias que presenta el conjunto dirty_iris. Comenta los valores que te llamen la atención.
 
@@ -327,7 +327,7 @@ grafico <- dirty_iris %>%
     values_to = "Outlier")
 
 
-ggplot(datos_grafico,
+ggplot(grafico,
        aes(x = Metodo, y = Petal.Length,
            color = Outlier)) +
   geom_point(position = "jitter", alpha = 0.6) +
@@ -394,9 +394,9 @@ dirty_iris %>%
 
 Vamos a comparar ahora los dos métodos de imputación gráficamente eliminando los outliers para una mejor visualización. 
 
-1. Recalcula las reglas de identificación de outliers (Ejercicio 6) para la nueva variable Petal.Length2.
+Recalcula las reglas de identificación de outliers (Ejercicio 6) para la nueva variable Petal.Length2.
 
-2. Representa los dos tipos de imputación empleados en un gráfico de dispersión (Petal.Length1 vs. Petal.Length2) eliminando los outliers identificados con la regla reglapercentil y poniendo en diferente color los datos originales y los imputados.
+Representa los dos tipos de imputación empleados en un gráfico de dispersión (Petal.Length1 vs. Petal.Length2) eliminando los outliers identificados con la regla reglapercentil y poniendo en diferente color los datos originales y los imputados.
 
 ```{r}
 #Primero habrá que recalcular las reglas de identificación de los outliers usando las funciones que hemos creado en el ejercicio 6
@@ -411,10 +411,41 @@ dirty_iris <- dirty_iris %>%
     )
   ))
 
-#Luego, se puede pasar a representar los dos tipos en un gráfico de dispersión (usaremos ifelse)
+#Luego, se puede pasar a representar los dos tipos en un gráfico de dispersión )
+# Identificar valores originales e imputados
+dirty_iris <- dirty_iris %>%
+  mutate(
+    Tipo = ifelse(
+      is.na(Petal.Length),
+      "Imputado",
+      "Original"
+    )
+  )
 
-gplot 
+# Eliminar outliers según percentiles
+datos_finales <- dirty_iris %>%
+  filter(!is.na(Petal.Length2_percentil),
+         !Petal.Length2_percentil)
 
+# Gráfico de dispersión
+ggplot(datos_finales,
+       aes(x = Petal.Length1,
+           y = Petal.Length2,
+           color = Tipo)) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_color_manual(
+    values = c(
+      "Original" = "green",
+      "Imputado" = "blue"
+    )
+  ) +
+  labs(
+    title = "Comparación de métodos de imputación",
+    x = "Imputación - media general",
+    y = "Imputación - media especie",
+    color = "Tipo de dato"
+  ) +
+  theme_minimal()
 ```
 
 
