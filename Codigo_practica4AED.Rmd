@@ -301,10 +301,15 @@ metodos <- c(
   "Petal.Length_percentil"
 )
 
-for metodo in metodos {
-  cat("Metodo", metodo)
-}
+#Imprimimos los valores de los outliers detectados por cada método, ordenados de menor a mayor
+for (metodo in metodos) {
+  cat("Método:", metodo)
 
+  valores <- dirty_iris$Petal.Length[
+    which(dirty_iris[[metodo]])]
+
+  print(sort(valores))
+}
 ```
 
 
