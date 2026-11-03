@@ -312,5 +312,43 @@ for (metodo in metodos) {
 }
 ```
 
+# Ejercicio 8: Representación gráfica
+
+Representa gráficamente los datos de Petal.Length (distribución de puntos en el eje y) para todas las reglas de detección implementadas (repartidas en el eje x) mostrando los valores identificados como típicos y los identificados como outliers en diferente color. Usa la función pivot_longer para poder agrupar por reglas y colorear los outliers fácilmente.
+
+Nota: usa en geom_point con la opción position='jitter' para mejorar la legibilidad del gráfico.
+
+```{r ejercicio 8}
+grafico <- dirty_iris %>%
+  select(Petal.Length, starts_with("Petal.Length_")) %>%
+  pivot_longer(
+    cols = starts_with("Petal.Length_"),
+    names_to = "Metodo",
+    values_to = "Outlier")
+
+
+ggplot(datos_grafico,
+       aes(x = Metodo, y = Petal.Length,
+           color = Outlier)) +
+  geom_point(position = "jitter", alpha = 0.6) +
+  scale_color_manual(
+    values = c("FALSE" = "green", "TRUE" = "blue"),
+    na.value = "black"
+  ) +
+  labs(
+    title = "Comparación de los métodos de detección de outliers",
+    x = "Método",
+    y = "Longitud del pétalo",
+    color = "Outlier"
+  ) +
+  theme_minimal()
+
+```
+
+# Imputación de datos
+
+Como se ha visto, con missing data nos referimos a una observación (o conjunto de observaciones) cuyo valor no es conocido.
+
+Vamos a ver a continuación ejemplos de cómo imputar valores realistas a esas observaciones perdidas.
 
 
