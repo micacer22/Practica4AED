@@ -1,0 +1,68 @@
+---
+title: "Práctica 4"
+author: "Miriam Caballero Cerveró"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  bookdown::pdf_document2:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    figure_caption: "Figura" 
+    table_caption: "Tabla"
+  html_notebook:
+    echo: true
+    number_sections: true
+    toc: true
+  html_document:
+    echo: true
+    number_sections: true
+    theme: lumen
+    toc: true
+  bookdown::html_document2:
+    echo: true
+    number_sections: true
+    theme: spacelab
+    toc: true
+    figure_caption: "Figura"
+    table_caption: "Tabla"
+always_allow_html: true
+params:
+  lang: ES
+lang: "`r switch(params$lang, ES = 'es-ES', EN = 'en-US')`"
+subtitle: "Análisis Exploratorio de Datos. Máster en Ciencia de Datos - UV"
+language:
+  label:
+    fig: 'Figura '
+    tab: 'Tabla '
+    eq: 'Ecuación '
+    thm: 'Teorema '
+    lem: 'Lema '
+    def: 'Definición '
+    cor: 'Corolario '
+    prp: 'Proposición '
+    exm: 'Ejemplo '
+    exr: 'Ejercicio '
+    proof: 'Demostración. '
+    remark: 'Nota: '
+    solution: 'Solución. '
+---
+
+# Introducción
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5)
+dir.create('results', showWarnings=FALSE, recursive=TRUE)
+```
+
+```{r paquetes}
+#library(...)
+```
+
+# Ejercicio ejemplo
+```{r ejemplo}
+
+```
