@@ -390,5 +390,32 @@ dirty_iris %>%
   select(Species, Petal.Length,
          Petal.Length1, Petal.Length2)
 ```
+# Ejercicio 10. Representación gráfica
+
+Vamos a comparar ahora los dos métodos de imputación gráficamente eliminando los outliers para una mejor visualización. 
+
+1. Recalcula las reglas de identificación de outliers (Ejercicio 6) para la nueva variable Petal.Length2.
+
+2. Representa los dos tipos de imputación empleados en un gráfico de dispersión (Petal.Length1 vs. Petal.Length2) eliminando los outliers identificados con la regla reglapercentil y poniendo en diferente color los datos originales y los imputados.
+
+```{r}
+#Primero habrá que recalcular las reglas de identificación de los outliers usando las funciones que hemos creado en el ejercicio 6
+dirty_iris <- dirty_iris %>%
+  mutate(across(
+    Petal.Length2,
+    list(
+      sigma = reglasigma,
+      hampel = reglahampel,
+      boxplot = reglaboxplot,
+      percentil = reglapercentil
+    )
+  ))
+
+#Luego, se puede pasar a representar los dos tipos en un gráfico de dispersión (usaremos ifelse)
+
+gplot 
+
+```
+
 
 
