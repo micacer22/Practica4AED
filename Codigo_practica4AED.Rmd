@@ -51,18 +51,67 @@ language:
     solution: 'Solución. '
 ---
 
-# Introducción
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5)
-dir.create('results', showWarnings=FALSE, recursive=TRUE)
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# CONFIGURACIÓN GENERAL
+library(knitr)
+options(width = 100)
+# Opciones generales chunks
+opts_chunk$set(echo = T, message = F, error = F, warning = F,
+               comment = NA, fig.align = 'center', dpi = 100, tidy = F,
+               cache.path = '.cache/', fig.path = './figure/')
+# options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+# knit_hooks$set(plot = knitr:::hook_plot_html)
+knitr::opts_chunk$set(fig.width=8, fig.height=4)
 ```
 
 ```{r paquetes}
-#library(...)
+library(pacman)
+library(readr)
+packages = c("knitr", "ggplot2","tidyr","dplyr","readr")
+pacman::p_load(char=packages)
 ```
 
-# Ejercicio ejemplo
-```{r ejemplo}
+# Introducción
+El objetivo de esta práctica es comprobar si los conjuntos de datos con los que vamos a trabajar son consistentes y, por tanto, pueden ser empleados para realizar un análisis sin errores. Las observaciones contenidas en los datos pueden presentar diferentes tipos de inconsistencias, como valores perdidos (missing values), valores especiales y valores anómalos (outliers).
 
+Para evitar estas inconsistencias, estos datos deberán ser eliminados, corregidos o imputados. Siendo las etapas que pueden seguirse para obtener datos consistentes:
+
+    Detección de las inconsistencias.
+    Detectar el campo o campos que la generan y las dependencias entre ellos.
+    Corrección de errores.
+
+Vamos a trabajar con el conjunto de datos dirty_iris, que ya conocemos, que contiene datos perdidos, valores especiales y anomalías de carácter numérico respecto a la distribución de los datos (dirty_iris.csv).
+
+```{r carga de datos}
+rm(list=ls())
+dirty_iris <- read_csv("data/dirty_iris.csv")
 ```
+
+# Detección de inconsistencias en los datos
+Por lo general, no hay un convenio o una representación común para indicar un dato perdido o incluso determinados valores especiales. En los siguientes ejercicios vamos a analizar cómo detectar inconsistencias presentes en los datos.
+
+Ejercicio 1: Inspección Visual
+
+Inspecciona visualmente los valores del conjunto de datos (View) y ordena de mayor a menor y de menor a mayor cada variable para descubrir las diferentes inconsistencias que presenta el conjunto dirty_iris. Comenta los valores que te llamen la atención.
+
+```{r ejercicio 1}
+#Inspeccionamos el conjunto de datos 
+View(dirty_iris)
+#Hacemos un resumen estadístico de los datos numéricos
+summary(dirty_iris)
+#Ordenamos cada variable numérica de forma decreciente
+for (col in names(dirty_iris)[sapply(dirty_iris, is.numeric)]) {
+  print(paste("Variable:", col))
+  print(sort(dirty_iris[[col]], decreasing = FALSE))
+  print(sort(dirty_iris[[col]], decreasing = TRUE))
+}
+```
+Observamos que en la variable sepal.width hay valores negativos que seguramente se deban a un error al apuntar los valores en el data frame. Además, en petal.width hay un valor infinito que seguramente se deba a un error de cálculo del ratio. 
+
