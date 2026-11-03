@@ -217,3 +217,20 @@ estad_clean %>% select(starts_with("Petal.Length"))
 estad_dirty %>% select(starts_with("Petal.Length"))
 ```
 Cuando observamos las diferencias con Petal.Lengt
+
+# Ejercicio 5: Métodos de detección de outliers
+Escribe una función que detecte los outliers de un vector x para cada uno de los siguientes métodos de detección de outliers univariantes (todas las funciones tienen que ser robustas a la presencia de valores NA).
+
+Regla 3 sigma reglasigma(x): Considera que los datos siguen una distribución gaussiana. Datos típicos caracterizados por la media y la dispersión por la varianza. Valores por encima de 3 desviaciones típicas se consideran outliers.
+
+Identificador Hampel reglahampel(x): Utiliza estimadores robustos y no presupone que los datos siguen una distribución gaussiana. Datos típicos caracterizados por la mediana y la dispersión por la median absolute deviation from the median (MADM). Valores por encima de 3 MADM se consideran outliers.
+
+Regla boxplot reglaboxplot(x): A partir de los datos se calcula su diagrama de caja (boxplot) y se definen como datos típicos superiores hasta el cuartil 75%, xs; datos típicos inferiores hasta el cuartil 25%, xi; y la dispersión se define como el rango intercuartílico (IQR=xs−xi). Valores por encima de xs+1.5⋅IQR o por debajo de xi−1.5⋅IQR se consideran outliers. Usa la función quantile para calcular los cuartiles.
+
+Percentiles reglapercentil(x): Cualquier valor que esté fuera del rango del percentil 5% y 95% se puede considerar como atípico. Usa la función quantile para calcular los percentiles.
+
+```{r ejercicio 5}
+# Regla 3 sigma 
+regla_sigma <- function()
+```
+
