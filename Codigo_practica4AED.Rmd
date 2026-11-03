@@ -230,7 +230,40 @@ Regla boxplot reglaboxplot(x): A partir de los datos se calcula su diagrama de c
 Percentiles reglapercentil(x): Cualquier valor que esté fuera del rango del percentil 5% y 95% se puede considerar como atípico. Usa la función quantile para calcular los percentiles.
 
 ```{r ejercicio 5}
-# Regla 3 sigma 
-regla_sigma <- function()
+# Creamos la función de la regla 3 sigma 
+reglasigma <- function(x) {
+  media <- mean(x, na.rm = TRUE)
+  desv <- sd(x, na.rm = TRUE)
+  abs(x - media) > 3 * desv
+}
+
+# Creamos la fucnión del identificador Hampel
+reglahampel <- function(x) {
+  med <- median(x, na.rm = TRUE)
+  dispersion <- madm(x)
+  abs(x - med) > 3 * dispersion
+}
+
+# Creamos la función de la regla boxplot
+reglaboxplot <- function(x) {
+  q <- quantile(x, c(0.25, 0.75), na.rm = TRUE)
+  rango <- IQR(x, na.rm = TRUE)
+
+  x < q[1] - 1.5 * rango |
+    x > q[2] + 1.5 * rango
+}
+
+# Creamos la función de la regla de percentiles 5% y 95%
+reglapercentil <- function(x) {
+  p <- quantile(x, c(0.05, 0.95), na.rm = TRUE)
+
+  x < p[1] | x > p[2]
+}
 ```
+
+# Ejercicio 6: Detección de outliers
+
+Utiliza la función mutate y across para identificar los outliers en la variable Petal.Length con todos los métodos de detección de outliers implementados. Genera una columna nueva para cada método. Nota: podría extenderse la aplicación a todas las variables numéricas usando también mutate, across y where.
+
+
 
