@@ -113,5 +113,37 @@ for (col in names(dirty_iris)[sapply(dirty_iris, is.numeric)]) {
   print(sort(dirty_iris[[col]], decreasing = TRUE))
 }
 ```
-Observamos que en la variable sepal.width hay valores negativos que seguramente se deban a un error al apuntar los valores en el data frame. Además, en petal.width hay un valor infinito que seguramente se deba a un error de cálculo del ratio. 
+Observamos que en la variable sepal.width hay valores negativos que seguramente se deban a un error al apuntar los valores en el data frame. Además, en petal.width hay un valor infinito que seguramente se deba a un error de cálculo del ratio. Además, también hay bastantes ceros, que habría que revisar, porque también pueden deberse a errores. Por último, hay distinto número de decimales en cada variable, que pueda hacer que se acumulen errores o que dificulten luego las comparaciones o representaciones entre las distintas columnas. 
+
+# Ejercicio 2: Valores especiales
+
+Visualizar los datos puede ser muy revelador, pero en general, especialmente para conjuntos de datos grandes, realizaremos este análisis de forma automática.
+
+Los valores especiales más comunes en R son:
+
+    NA (not available): missing value o dato perdido (is.na)
+    NULL (empty set): elemento nulo de longitud 0 (is.null)
+    NaN (not a number): indeterminación con resultado desconocido (is.nan)
+    Inf (infinite): valor numérico de valor infinito (is.infinite)
+
+Nota: A parte de estas funciones, is.numeric comprueba si la variable es numérica; is.finite comprueba la existencia de cualquier valor especial en un vector numérico pero devuelve FALSE para variables de texto.
+
+Reemplaza, en todas las columnas numéricas del data frame dirty_iris, los valores que sean especiales (usando is.finite), negativos, o iguales a cero, por NA. Nota: Puedes reemplazar los valores para cada variable del dataframe usando mutate con la función ifelse.
+
+```{r ejercicio 2}
+dirty_iris <- dirty_iris %>%
+  mutate(across(
+    where(is.numeric),
+    ~ ifelse(!is.finite(.) | . <= 0, NA_real_, .)
+  ))
+#Comprobamos que ha hecho lo que le hemos pedido
+head(dirty_iris) #Todo OK
+```
+
+# Ejercicio 3: Valores perdidos y observaciones completas
+
+ 1. Calcula el número y porcentaje de observaciones completas (muestras sin ningún dato perdido) empleando complete.cases (detecta todos los registros sin datos faltantes).
+ 
+2. Emplea después la función na.omit para quedarnos solo con las filas con datos completos en un nuevo data frame clean_iris.
+
 
