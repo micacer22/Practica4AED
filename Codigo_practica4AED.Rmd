@@ -280,5 +280,32 @@ dirty_iris <- dirty_iris %>%
 dirty_iris %>%
   select(Petal.Length, starts_with("Petal.Length_"))
 ```
+# Ejercicio 7: Comparativa de los métodos de detección de outliers
+
+En los métodos de detección de outliers analizados, examina los resultados comparando:
+
+Número de outliers detectados por método.
+Los valores etiquetados como outliers (ordenados de menor a mayor).
+
+```{r}
+dirty_iris %>%
+  summarise(across(
+    starts_with("Petal.Length_"),
+    ~ sum(., na.rm = TRUE)
+  ))
+
+metodos <- c(
+  "Petal.Length_sigma",
+  "Petal.Length_hampel",
+  "Petal.Length_boxplot",
+  "Petal.Length_percentil"
+)
+
+for metodo in metodos {
+  cat("Metodo", metodo)
+}
+
+```
+
 
 
